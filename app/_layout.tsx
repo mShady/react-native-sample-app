@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import Instabug, { InvocationEvent } from 'instabug-reactnative';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -19,7 +20,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+    const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
@@ -34,11 +35,16 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
-
+  
   if (!loaded) {
     return null;
   }
 
+  Instabug.init({
+    token: '652742ecbd181786bcf93d3b9945adae',
+    invocationEvents: [InvocationEvent.shake, InvocationEvent.screenshot, InvocationEvent.floatingButton],
+  });
+  
   return <RootLayoutNav />;
 }
 
